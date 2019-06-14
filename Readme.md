@@ -136,3 +136,7 @@ I would recommend editing the `kvs_log_configuration` and modifying the root log
 ![awk-kinesis dashboard](aws-kinesis-dashboard.jpg)
 
 ... yes it was getting dark after all this 'hacking' and writing ...
+
+### And let the fun begin
+
+Now you can wield the power of AWS Kinesis, to do something with your video stream. Standard it will be stored with a retention of 1 day, so you can e.g. rewind to check important events captured by your camera. You can also feed the steam to other services, e.g. to recognize faces and take actions based on this.
