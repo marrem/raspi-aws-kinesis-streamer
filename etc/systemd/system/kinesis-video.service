@@ -1,0 +1,15 @@
+[Unit]
+Description=Camera AWS Kinesis video streamer
+After=network.target
+
+[Service]
+Type=simple
+User=kinesis
+EnvironmentFile=/etc/default/kinesis-video
+ExecStart=/usr/local/sbin/aws_kinesis_live_stream.sh ${STREAM_NAME}
+KillMode=control-group
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

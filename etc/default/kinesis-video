@@ -1,0 +1,5 @@
+AWS_ACCESS_KEY_ID=<your aws user access key>
+AWS_SECRET_ACCESS_KEY=<your aws user secret access key>
+AWS_DEFAULT_REGION=<your aws kinesis region>
+GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0:$GST_PLUGIN_PATH
+STREAM_NAME=camera1
