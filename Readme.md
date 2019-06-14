@@ -17,6 +17,8 @@ See also [Install Steps for Ubuntu 17.x and Raspbian Stretch using apt-get](http
 
 Install with apt-get / aptitude:
 
+
+```
 git
 cmake
 g++
@@ -32,8 +34,10 @@ gstreamer1.0-plugins-good
 gstreamer1.0-plugins-ugly
 gstreamer1.0-tools
 gstreamer1.0-omx
+```
 
-Check if you gstreamer can find the omx plugins.
+
+Check if your gstreamer can find the omx plugins.
 
 ```
 pi@camera2:~ $ gst-inspect-1.0 | grep omx
