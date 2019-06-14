@@ -52,3 +52,83 @@ Go into the project directory, then the subdirectory _kinesis_video_native_build
 ```
 ./min-install-script
 ```
+
+
+### Install
+
+When the _min-install-script_ has run successfully. It has built a number of sample applications and a couple of libraries.
+
+It is the latter we are interested in. More specifically:
+
+* libgstkvssink.so The kvssink gstreamer plugin
+* libproducer.so The producer library the `libgstkvssink.so` has been linked to
+
+Create a directory to house the gstreamer plugin:
+
+```
+mkdir /usr/local/lib/gstreamer-1.0
+```
+
+Put the `libgstkvssink.so` in this directory. We will tell gstreamer of it's existence by adding the directory to the GST_PLUGIN_PATH environment variable.
+
+`libgstkvssink.so` is linked to `libproducer.so`. So put the latter into `/usr/local/lib`. Run ldconfig -v as root. You will see that the library will be added to the ld search path.
+
+
+### Check
+
+pi@camera2:~ $ gst-inspect-1.0 | grep kvssink
+kvssink:  kvssink: KVS Sink
+
+
+## The streaming service
+
+### Install
+
+Install the file from this repository by copying them to:
+
+
+* etc/systemd/system/kinesis-video.service -> /etc/systemd/system/kinesis-video.service
+* etc/default/kinesis-video -> /etc/default/kinesis-video
+* sbin/aws_kinesis_live_stream.sh
+
+Run `systemctl daemon-reload`, to scan the new service.
+
+### Configure
+
+#### AWS
+
+Setup a _iam_ user with the correct permissions. Setup a Kinesis Video Stream.
+See [Getting Started](https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/getting-started.html)
+
+
+#### The raspberry pi
+
+Edit `/etc/default/kinesis-video`
+
+Set the correct access-key, secret-access-key , aws-region and stream name to use.
+Check that the GST_PLUGIN_PATH includes the directory where you have put the kvssink plugin.
+
+Check / edit `/etc/systemd/system/kinesis-video.service`. Note the 'user'.
+
+Create this user and add it to the `video` group.
+
+Check / edit `sbin/aws_kinesis_live_stream.sh`. Note the LOG_CONFIG.
+
+Copy the `kvs_log_configuration` from the _Amazon Kinesis Video Streams Producer SDK C/C++_ project's `kinesis-video-native-build` directory and put it in the directory where LOG_CONFIG points to.
+
+If necessary create this directory and chown it to the user you created above.
+
+I would recommend editing the `kvs_log_configuration` and modifying the root logging level. The DEBUG level produces an awful lot of logging.
+
+
+### Enable and start
+
+* systemctl enable kinesis-video
+* systemctl start kinesis-video
+* systemctl status kinesis-video
+
+### View the stream at aws kinesis dashboard
+
+![awk-kinesis dashboard](aws-kinesis-dashboard.jpg)
+
+... yes it was getting dark after all this 'hacking' and writing ...
